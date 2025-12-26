@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terry - AI Voice Assistant</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Background gradient -->
+    <div class="gradient-bg"></div>
+
+    <!-- Main container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-microphone-alt"></i>
+                <h1>Terry</h1>
+                <span class="version">v6.1.9</span>
+            </div>
+            <div class="header-actions">
+                <a href="/docs" target="_blank" class="icon-btn" title="API Documentation (Swagger UI)">
+                    <i class="fas fa-code"></i>
+                </a>
+                <button class="icon-btn" id="notificationsToggle" title="Notificaciones">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                </button>
+                <button class="icon-btn" id="themeToggle" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="icon-btn" id="silentToggle" title="Toggle silent mode">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Online</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-sticky-note"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="notesCount">0</div>
+                    <div class="stat-label">Notas</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="memoryCount">0</div>
+                    <div class="stat-label">Interacciones</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="macrosCount">0</div>
+                    <div class="stat-label">Macros</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value" id="commandsCount">0</div>
+                    <div class="stat-label">Comandos Hoy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Quick Commands Bar -->
+            <section class="quick-commands-section" style="margin-bottom: var(--spacing-lg);">
+                <div class="panel-header" style="margin-bottom: var(--spacing-md);">
+                    <h3 style="font-size: 1.125rem;">⚡ Comandos Rápidos</h3>
+                    <button class="btn-small" id="configQuickCommands">
+                        <i class="fas fa-cog"></i> Configurar
+                    </button>
+                </div>
+                <div class="quick-commands-grid" id="quickCommandsGrid">
+                    <!-- Quick command buttons will be added here dynamically -->
+                </div>
+            </section>
+
+            <!-- Voice input section -->
+            <section class="voice-section">
+                <div class="voice-input-card">
+                    <div class="voice-visualizer" id="voiceVisualizer">
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-ring delay-1"></div>
+                        <div class="pulse-ring delay-2"></div>
+                        <button class="voice-btn" id="voiceBtn">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    <div class="voice-status" id="voiceStatus">
+                        <p>Di "Terry" para comenzar</p>
+                    </div>
+                    <div class="command-input-wrapper">
+                        <input type="text"
+                               class="command-input"
+                               id="commandInput"
+                               placeholder="O escribe un comando..."
+                               autocomplete="off">
+                        <button class="send-btn" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <!-- Autocomplete dropdown -->
+                        <div class="autocomplete-dropdown" id="autocompleteDropdown">
+                            <div class="autocomplete-list" id="autocompleteList">
+                                <!-- Suggestions will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tabs navigation -->
+            <div class="tabs">
+                <button class="tab active" data-tab="chat">
+                    <i class="fas fa-comments"></i> Chat
+                </button>
+                <button class="tab" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </button>
+                <button class="tab" data-tab="history">
+                    <i class="fas fa-history"></i> Historial
+                </button>
+                <button class="tab" data-tab="notes">
+                    <i class="fas fa-sticky-note"></i> Notas
+                </button>
+                <button class="tab" data-tab="macros">
+                    <i class="fas fa-bolt"></i> Macros
+                </button>
+                <button class="tab" data-tab="templates">
+                    <i class="fas fa-layer-group"></i> Templates
+                </button>
+                <button class="tab" data-tab="logs">
+                    <i class="fas fa-terminal"></i> Logs
+                </button>
+                <button class="tab" data-tab="profiler">
+                    <i class="fas fa-tachometer-alt"></i> Performance
+                </button>
+                <button class="tab" data-tab="monitor">
+                    <i class="fas fa-heartbeat"></i> Monitor
+                </button>
+                <button class="tab" data-tab="settings">
+                    <i class="fas fa-cog"></i> Configuración
+                </button>
+            </div>
+
+            <!-- Tab content -->
+            <div class="tab-content">
+                <!-- Chat tab -->
+                <div class="tab-panel active" id="chatPanel">
+                    <div class="panel-header">
+                        <h3>Conversación con Terry</h3>
+                        <button class="btn-secondary" id="clearChat">
+                            <i class="fas fa-trash"></i> Limpiar
+                        </button>
+                    </div>
+                    <div class="chat-container" id="chatContainer">
+                        <div class="chat-welcome">
+                            <i class="fas fa-robot"></i>
+                            <h4>¡Hola! Soy Terry</h4>
+                            <p>Escribe un mensaje o usa el micrófono para hablar conmigo</p>
+                        </div>
+                    </div>
+                    <div class="chat-input-wrapper">
+                        <input type="text"
+                               class="chat-input"
+                               id="chatInput"
+                               placeholder="Escribe un mensaje...">
+                        <button class="chat-send-btn" id="chatSendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dashboard tab -->
+                <div class="tab-panel" id="dashboardPanel">
+                    <div class="panel-header">
+                        <h3>📊 Dashboard de Métricas</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <select id="dashboardTimeRange" class="time-range-selector">
+                                <option value="hour">Última hora</option>
+                                <option value="day" selected>Hoy</option>
+                                <option value="week">Esta semana</option>
+                                <option value="month">Este mes</option>
+                            </select>
+                            <button class="btn-secondary" id="refreshDashboard">
+                                <i class="fas fa-sync"></i> Actualizar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Summary Cards -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-terminal"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Comandos Ejecutados</div>
+                                <div class="metric-value" id="totalCommands">0</div>
+                                <div class="metric-trend" id="commandsTrend">
+                                    <i class="fas fa-arrow-up"></i> <span>0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Tasa de Éxito</div>
+                                <div class="metric-value" id="successRate">0%</div>
+                                <div class="metric-trend positive" id="successTrend">
+                                    <i class="fas fa-arrow-up"></i> <span>0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Tiempo Promedio</div>
+                                <div class="metric-value" id="avgResponseTime">0ms</div>
+                                <div class="metric-trend" id="timeTrend">
+                                    <i class="fas fa-minus"></i> <span>0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card">
+                            <div class="metric-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="metric-info">
+                                <div class="metric-label">Comando Más Usado</div>
+                                <div class="metric-value small" id="topCommand">N/A</div>
+                                <div class="metric-trend" id="topCommandCount">
+                                    <span>0 veces</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4>📈 Comandos por Hora</h4>
+                                <div class="chart-legend" id="commandsChartLegend"></div>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="commandsChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4>🎯 Top 10 Comandos</h4>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="topCommandsChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4>⚡ Tiempo de Respuesta</h4>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="responseTimeChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4>📊 Tipos de Acciones</h4>
+                            </div>
+                            <div class="chart-wrapper">
+                                <canvas id="actionsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="activity-section">
+                        <div class="panel-header">
+                            <h4>🕐 Actividad Reciente</h4>
+                        </div>
+                        <div class="activity-list" id="recentActivity">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History tab -->
+                <div class="tab-panel" id="historyPanel">
+                    <div class="panel-header">
+                        <h3>Historial de Comandos</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-secondary" id="exportHistory">
+                                <i class="fas fa-download"></i> Exportar
+                            </button>
+                            <button class="btn-secondary" id="clearHistory">
+                                <i class="fas fa-trash"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Search box -->
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="historySearch" placeholder="Buscar comandos... (Ctrl+K)">
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <div class="empty-state">
+                            <i class="fas fa-comment-slash"></i>
+                            <p>No hay comandos recientes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes tab -->
+                <div class="tab-panel" id="notesPanel">
+                    <div class="panel-header">
+                        <h3>Tus Notas</h3>
+                        <button class="btn-primary" id="addNoteBtn">
+                            <i class="fas fa-plus"></i> Nueva Nota
+                        </button>
+                    </div>
+                    <div class="notes-grid" id="notesGrid">
+                        <div class="empty-state">
+                            <i class="fas fa-sticky-note"></i>
+                            <p>No hay notas guardadas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Macros tab -->
+                <div class="tab-panel" id="macrosPanel">
+                    <div class="panel-header">
+                        <h3>Macros Guardados</h3>
+                        <button class="btn-primary" id="recordMacroBtn">
+                            <i class="fas fa-circle"></i> Grabar Macro
+                        </button>
+                    </div>
+                    <div class="macros-list" id="macrosList">
+                        <div class="empty-state">
+                            <i class="fas fa-bolt"></i>
+                            <p>No hay macros creados</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Templates tab -->
+                <div class="tab-panel" id="templatesPanel">
+                    <div class="panel-header">
+                        <h3>📝 Templates de Comandos</h3>
+                        <button class="btn-primary" id="createTemplateBtn">
+                            <i class="fas fa-plus"></i> Crear Template
+                        </button>
+                    </div>
+
+                    <!-- Templates Grid -->
+                    <div class="templates-grid" id="templatesGrid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Empty state -->
+                    <div class="empty-state" id="templatesEmpty" style="display: none;">
+                        <i class="fas fa-layer-group"></i>
+                        <p>No hay templates creados</p>
+                        <button class="btn-primary" onclick="document.getElementById('createTemplateBtn').click()">
+                            Crear primer template
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Logs tab -->
+                <div class="tab-panel" id="logsPanel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-terminal"></i> Logs en Tiempo Real</h3>
+                        <div style="display: flex; gap: var(--spacing-md); align-items: center;">
+                            <!-- Filters -->
+                            <div class="log-filters">
+                                <button class="log-filter-btn active" data-level="all">
+                                    <i class="fas fa-list"></i> Todos
+                                </button>
+                                <button class="log-filter-btn" data-level="debug">
+                                    <i class="fas fa-bug"></i> Debug
+                                </button>
+                                <button class="log-filter-btn" data-level="info">
+                                    <i class="fas fa-info-circle"></i> Info
+                                </button>
+                                <button class="log-filter-btn" data-level="warn">
+                                    <i class="fas fa-exclamation-triangle"></i> Warn
+                                </button>
+                                <button class="log-filter-btn" data-level="error">
+                                    <i class="fas fa-exclamation-circle"></i> Error
+                                </button>
+                            </div>
+                            <!-- Actions -->
+                            <div style="display: flex; gap: var(--spacing-sm);">
+                                <button class="btn-secondary btn-sm" id="toggleAutoScroll">
+                                    <i class="fas fa-arrow-down"></i> Auto-scroll: ON
+                                </button>
+                                <button class="btn-secondary btn-sm" id="exportLogs">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                                <button class="btn-secondary btn-sm" id="clearLogs">
+                                    <i class="fas fa-trash"></i> Limpiar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logs Container -->
+                    <div class="logs-container" id="logsContainer">
+                        <div class="logs-empty" id="logsEmpty">
+                            <i class="fas fa-terminal"></i>
+                            <p>No hay logs aún</p>
+                            <small>Los logs aparecerán aquí en tiempo real</small>
+                        </div>
+                        <div class="logs-list" id="logsList"></div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="logs-stats" id="logsStats">
+                        <div class="log-stat">
+                            <span class="log-stat-label">Total:</span>
+                            <span class="log-stat-value" id="logsTotalCount">0</span>
+                        </div>
+                        <div class="log-stat">
+                            <span class="log-stat-label">Debug:</span>
+                            <span class="log-stat-value log-level-debug" id="logsDebugCount">0</span>
+                        </div>
+                        <div class="log-stat">
+                            <span class="log-stat-label">Info:</span>
+                            <span class="log-stat-value log-level-info" id="logsInfoCount">0</span>
+                        </div>
+                        <div class="log-stat">
+                            <span class="log-stat-label">Warn:</span>
+                            <span class="log-stat-value log-level-warn" id="logsWarnCount">0</span>
+                        </div>
+                        <div class="log-stat">
+                            <span class="log-stat-label">Error:</span>
+                            <span class="log-stat-value log-level-error" id="logsErrorCount">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Profiler tab -->
+                <div class="tab-panel" id="profilerPanel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-tachometer-alt"></i> Performance Profiler</h3>
+                        <div style="display: flex; gap: var(--spacing-sm);">
+                            <button class="btn-secondary btn-sm" id="refreshProfiler">
+                                <i class="fas fa-sync-alt"></i> Actualizar
+                            </button>
+                            <button class="btn-secondary btn-sm" id="exportProfiler">
+                                <i class="fas fa-download"></i> Exportar
+                            </button>
+                            <button class="btn-secondary btn-sm" id="clearProfiler">
+                                <i class="fas fa-trash"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="profiler-summary">
+                        <div class="profiler-card">
+                            <div class="profiler-card-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="profiler-card-content">
+                                <div class="profiler-card-label">Tiempo Promedio</div>
+                                <div class="profiler-card-value" id="profilerAvgTime">0ms</div>
+                            </div>
+                        </div>
+                        <div class="profiler-card">
+                            <div class="profiler-card-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="profiler-card-content">
+                                <div class="profiler-card-label">Comando Más Rápido</div>
+                                <div class="profiler-card-value" id="profilerFastest">-</div>
+                                <div class="profiler-card-detail" id="profilerFastestTime">-</div>
+                            </div>
+                        </div>
+                        <div class="profiler-card">
+                            <div class="profiler-card-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="profiler-card-content">
+                                <div class="profiler-card-label">Comando Más Lento</div>
+                                <div class="profiler-card-value" id="profilerSlowest">-</div>
+                                <div class="profiler-card-detail" id="profilerSlowestTime">-</div>
+                            </div>
+                        </div>
+                        <div class="profiler-card">
+                            <div class="profiler-card-icon" style="background: linear-gradient(135deg, var(--primary), var(--secondary));">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="profiler-card-content">
+                                <div class="profiler-card-label">Total Comandos</div>
+                                <div class="profiler-card-value" id="profilerTotalCommands">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Chart -->
+                    <div class="profiler-chart-container">
+                        <h4><i class="fas fa-chart-bar"></i> Tiempos de Ejecución</h4>
+                        <canvas id="profilerChart"></canvas>
+                    </div>
+
+                    <!-- Slowest Commands Table -->
+                    <div class="profiler-table-container">
+                        <h4><i class="fas fa-list"></i> Comandos Más Lentos (Top 10)</h4>
+                        <div class="profiler-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Comando</th>
+                                        <th>Tiempo</th>
+                                        <th>Estado</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="profilerTableBody">
+                                    <tr>
+                                        <td colspan="5" class="profiler-empty">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                            <p>No hay datos de performance aún</p>
+                                            <small>Ejecuta comandos para ver estadísticas</small>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Bottleneck Analysis -->
+                    <div class="profiler-bottlenecks">
+                        <h4><i class="fas fa-exclamation-circle"></i> Análisis de Bottlenecks</h4>
+                        <div id="profilerBottlenecks" class="bottlenecks-list">
+                            <div class="bottleneck-empty">
+                                <i class="fas fa-check-circle"></i>
+                                <p>No se detectaron bottlenecks</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Monitor tab -->
+                <div class="tab-panel" id="monitorPanel">
+                    <div class="panel-header">
+                        <h3><i class="fas fa-heartbeat"></i> Monitor del Sistema</h3>
+                        <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
+                            <span class="monitor-status" id="monitorStatus">
+                                <i class="fas fa-circle" style="color: #10b981;"></i> Sistema Operativo
+                            </span>
+                            <button class="btn-secondary btn-sm" id="refreshMonitor">
+                                <i class="fas fa-sync-alt"></i> Actualizar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- System Health Cards -->
+                    <div class="monitor-health">
+                        <div class="health-card">
+                            <div class="health-card-header">
+                                <i class="fas fa-microchip"></i>
+                                <span>CPU</span>
+                            </div>
+                            <div class="health-card-body">
+                                <div class="health-value" id="monitorCPU">--%</div>
+                                <div class="health-bar">
+                                    <div class="health-bar-fill" id="monitorCPUBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="health-card">
+                            <div class="health-card-header">
+                                <i class="fas fa-memory"></i>
+                                <span>RAM</span>
+                            </div>
+                            <div class="health-card-body">
+                                <div class="health-value" id="monitorRAM">--MB</div>
+                                <div class="health-bar">
+                                    <div class="health-bar-fill" id="monitorRAMBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="health-card">
+                            <div class="health-card-header">
+                                <i class="fas fa-clock"></i>
+                                <span>Uptime</span>
+                            </div>
+                            <div class="health-card-body">
+                                <div class="health-value" id="monitorUptime">--</div>
+                                <div class="health-detail" id="monitorStartTime">Iniciado: --</div>
+                            </div>
+                        </div>
+
+                        <div class="health-card">
+                            <div class="health-card-header">
+                                <i class="fas fa-bolt"></i>
+                                <span>Comandos/min</span>
+                            </div>
+                            <div class="health-card-body">
+                                <div class="health-value" id="monitorCPM">0</div>
+                                <div class="health-detail">Promedio últimos 5 min</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services Status -->
+                    <div class="monitor-services">
+                        <h4><i class="fas fa-cogs"></i> Estado de Servicios</h4>
+                        <div class="services-grid">
+                            <div class="service-item" data-service="llm">
+                                <div class="service-indicator">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="service-info">
+                                    <div class="service-name">LLM (Ollama)</div>
+                                    <div class="service-status">Verificando...</div>
+                                </div>
+                                <div class="service-stats">
+                                    <span class="service-stat-item">
+                                        <i class="fas fa-check-circle"></i> <span id="llmRequests">0</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="service-item" data-service="stt">
+                                <div class="service-indicator">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="service-info">
+                                    <div class="service-name">STT (Speech-to-Text)</div>
+                                    <div class="service-status">Verificando...</div>
+                                </div>
+                                <div class="service-stats">
+                                    <span class="service-stat-item">
+                                        <i class="fas fa-microphone"></i> <span id="sttRequests">0</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="service-item" data-service="tts">
+                                <div class="service-indicator">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="service-info">
+                                    <div class="service-name">TTS (Text-to-Speech)</div>
+                                    <div class="service-status">Verificando...</div>
+                                </div>
+                                <div class="service-stats">
+                                    <span class="service-stat-item">
+                                        <i class="fas fa-volume-up"></i> <span id="ttsRequests">0</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="service-item" data-service="camera">
+                                <div class="service-indicator">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="service-info">
+                                    <div class="service-name">Camera Vision</div>
+                                    <div class="service-status">Verificando...</div>
+                                </div>
+                                <div class="service-stats">
+                                    <span class="service-stat-item">
+                                        <i class="fas fa-user"></i> <span id="cameraDetections">0</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="service-item" data-service="websocket">
+                                <div class="service-indicator">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="service-info">
+                                    <div class="service-name">WebSocket</div>
+                                    <div class="service-status">Verificando...</div>
+                                </div>
+                                <div class="service-stats">
+                                    <span class="service-stat-item">
+                                        <i class="fas fa-exchange-alt"></i> <span id="wsMessages">0</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="service-item" data-service="database">
+                                <div class="service-indicator">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="service-info">
+                                    <div class="service-name">Database (SQLite)</div>
+                                    <div class="service-status">Verificando...</div>
+                                </div>
+                                <div class="service-stats">
+                                    <span class="service-stat-item">
+                                        <i class="fas fa-database"></i> <span id="dbSize">0 KB</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Timeline -->
+                    <div class="monitor-timeline">
+                        <h4><i class="fas fa-stream"></i> Actividad Reciente</h4>
+                        <div class="timeline-container" id="monitorTimeline">
+                            <div class="timeline-empty">
+                                <i class="fas fa-clock"></i>
+                                <p>No hay actividad reciente</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Info -->
+                    <div class="monitor-system-info">
+                        <h4><i class="fas fa-info-circle"></i> Información del Sistema</h4>
+                        <div class="system-info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Platform:</span>
+                                <span class="info-value" id="infoPlatform">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Python Version:</span>
+                                <span class="info-value" id="infoPython">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Terry Version:</span>
+                                <span class="info-value">v6.1.7</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">WebSocket:</span>
+                                <span class="info-value" id="infoWebSocket">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Local IP:</span>
+                                <span class="info-value" id="infoIP">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Port:</span>
+                                <span class="info-value">8080</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings tab -->
+                <div class="tab-panel" id="settingsPanel">
+                    <div class="panel-header">
+                        <h3>Configuración</h3>
+                    </div>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Modo Silencioso</h4>
+                                <p>Respuestas sin voz, solo notificaciones</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="silentModeToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Tema Oscuro</h4>
+                                <p>Cambiar entre modo claro y oscuro</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="darkModeToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Wake Word</h4>
+                                <p>Palabra de activación</p>
+                            </div>
+                            <input type="text" class="setting-input" value="terry" readonly>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Idioma</h4>
+                                <p>Idioma de respuestas</p>
+                            </div>
+                            <select class="setting-select">
+                                <option value="es">Español</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Configuration Section -->
+                    <div class="panel-header" style="margin-top: 2rem;">
+                        <h3>
+                            <i class="fas fa-bell"></i> Configuración de Notificaciones
+                        </h3>
+                    </div>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Notificaciones del Navegador</h4>
+                                <p>Mostrar notificaciones nativas del sistema</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="browserNotificationsToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Sonidos</h4>
+                                <p>Reproducir sonido al recibir notificaciones</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="notificationSoundsToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Notificar Comandos</h4>
+                                <p>Notificar cuando se ejecuta un comando</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="notifyCommandsToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Notificar Errores</h4>
+                                <p>Notificar cuando ocurre un error</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="notifyErrorsToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Themes & Personalization Section -->
+                    <div class="panel-header" style="margin-top: 2rem;">
+                        <h3>
+                            <i class="fas fa-palette"></i> Temas y Personalización
+                        </h3>
+                    </div>
+
+                    <!-- Theme Selector -->
+                    <div class="themes-grid" id="themesGrid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Custom Theme Editor (Collapsible) -->
+                    <div class="custom-theme-section">
+                        <button class="btn-secondary" id="toggleCustomThemeEditor" style="width: 100%; margin-top: 1rem;">
+                            <i class="fas fa-paint-brush"></i> Crear Tema Personalizado
+                        </button>
+                        <div class="custom-theme-editor" id="customThemeEditor" style="display: none;">
+                            <h4 style="margin-top: 1rem;">Editor de Colores</h4>
+                            <div class="color-pickers-grid">
+                                <div class="color-picker-item">
+                                    <label>Color Principal</label>
+                                    <input type="color" id="customPrimary" value="#ff6b35">
+                                </div>
+                                <div class="color-picker-item">
+                                    <label>Color Secundario</label>
+                                    <input type="color" id="customSecondary" value="#ff8c42">
+                                </div>
+                                <div class="color-picker-item">
+                                    <label>Color de Fondo</label>
+                                    <input type="color" id="customBgPrimary" value="#0f172a">
+                                </div>
+                                <div class="color-picker-item">
+                                    <label>Color de Superficie</label>
+                                    <input type="color" id="customSurface" value="#1e293b">
+                                </div>
+                                <div class="color-picker-item">
+                                    <label>Texto Principal</label>
+                                    <input type="color" id="customTextPrimary" value="#f1f5f9">
+                                </div>
+                                <div class="color-picker-item">
+                                    <label>Texto Secundario</label>
+                                    <input type="color" id="customTextSecondary" value="#94a3b8">
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn-primary" id="applyCustomTheme">
+                                    <i class="fas fa-check"></i> Aplicar Tema Custom
+                                </button>
+                                <button class="btn-secondary" id="exportTheme">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                                <button class="btn-secondary" id="importTheme">
+                                    <i class="fas fa-upload"></i> Importar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Camera Configuration Section -->
+                    <div class="panel-header" style="margin-top: 2rem;">
+                        <h3>
+                            <i class="fas fa-camera"></i> Configuración de Cámara
+                        </h3>
+                    </div>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Habilitar Cámara</h4>
+                                <p>Activar reconocimiento facial</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="cameraEnabledToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Auto-inicio</h4>
+                                <p>Iniciar cámara con Terry</p>
+                            </div>
+                            <label class="toggle">
+                                <input type="checkbox" id="cameraAutoStartToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Tipo de Cámara</h4>
+                                <p>IP Camera o Webcam local</p>
+                            </div>
+                            <select class="setting-select" id="cameraType">
+                                <option value="ip">Cámara IP (RTSP)</option>
+                                <option value="webcam">Webcam Local</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- IP Camera Settings -->
+                    <div id="ipCameraSettings" class="settings-grid" style="margin-top: 1rem;">
+                        <div class="setting-item full-width">
+                            <div class="setting-info">
+                                <h4>URL de la Cámara</h4>
+                                <p>Ej: rtsp://192.168.1.100:554/stream</p>
+                            </div>
+                            <input type="text" id="cameraUrl" class="setting-input" placeholder="rtsp://192.168.1.100:554/stream">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Usuario</h4>
+                                <p>Usuario de la cámara (opcional)</p>
+                            </div>
+                            <input type="text" id="cameraUsername" class="setting-input" placeholder="admin">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Contraseña</h4>
+                                <p>Contraseña de la cámara (opcional)</p>
+                            </div>
+                            <input type="password" id="cameraPassword" class="setting-input" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <!-- Webcam Settings -->
+                    <div id="webcamSettings" class="settings-grid" style="margin-top: 1rem; display: none;">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Índice de Webcam</h4>
+                                <p>0 = primera webcam, 1 = segunda, etc.</p>
+                            </div>
+                            <input type="number" id="webcamIndex" class="setting-input" value="0" min="0" max="10">
+                        </div>
+                    </div>
+
+                    <!-- Camera Actions -->
+                    <div class="settings-grid" style="margin-top: 1rem;">
+                        <div class="setting-item full-width">
+                            <button class="btn-primary" id="saveCameraConfig" style="margin-right: 0.5rem;">
+                                <i class="fas fa-save"></i> Guardar Configuración
+                            </button>
+                            <button class="btn-secondary" id="testCamera">
+                                <i class="fas fa-play-circle"></i> Probar Cámara
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Camera Status -->
+                    <div id="cameraStatus" class="settings-grid" style="margin-top: 1rem; display: none;">
+                        <div class="setting-item full-width camera-status-panel">
+                            <h4><i class="fas fa-info-circle"></i> Estado de la Cámara</h4>
+                            <div id="cameraStatusContent">
+                                <p>Cargando...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="system-info">
+                        <h4>Información del Sistema</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Versión:</span>
+                                <span class="info-value">6.1.0</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Mejoras:</span>
+                                <span class="info-value">20/20</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Estado:</span>
+                                <span class="info-value status-online">Online</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">API:</span>
+                                <span class="info-value">http://localhost:8080</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard shortcuts help -->
+    <div style="position: fixed; bottom: 1rem; left: 1rem; padding: 0.75rem; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: var(--radius-md); font-size: 0.75rem; color: var(--text-secondary); z-index: 999;">
+        <div style="font-weight: 600; margin-bottom: 0.25rem; color: var(--text-primary);">⌨️ Atajos</div>
+        <div><kbd style="background: var(--bg-secondary); padding: 0.1rem 0.3rem; border-radius: 3px;">Ctrl+K</kbd> Buscar</div>
+        <div><kbd style="background: var(--bg-secondary); padding: 0.1rem 0.3rem; border-radius: 3px;">Ctrl+Enter</kbd> Enviar</div>
+        <div><kbd style="background: var(--bg-secondary); padding: 0.1rem 0.3rem; border-radius: 3px;">Ctrl+E</kbd> Exportar</div>
+        <div><kbd style="background: var(--bg-secondary); padding: 0.1rem 0.3rem; border-radius: 3px;">ESC</kbd> Cerrar</div>
+    </div>
+
+    <!-- Notification toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- Notifications Center -->
+    <div class="notifications-panel" id="notificationsPanel">
+        <div class="notifications-header">
+            <h3><i class="fas fa-bell"></i> Notificaciones</h3>
+            <div class="notifications-header-actions">
+                <button class="icon-btn-small" id="clearNotifications" title="Limpiar todas">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="icon-btn-small" id="closeNotifications" title="Cerrar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="notifications-body" id="notificationsBody">
+            <!-- Empty state -->
+            <div class="notifications-empty" id="notificationsEmpty">
+                <i class="fas fa-bell-slash"></i>
+                <p>No hay notificaciones</p>
+            </div>
+            <!-- Notifications list -->
+            <div class="notifications-list" id="notificationsList"></div>
+        </div>
+        <div class="notifications-footer">
+            <button class="btn-secondary btn-sm" id="requestNotificationPermission">
+                <i class="fas fa-bell"></i> Habilitar notificaciones del navegador
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal for new note -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nueva Nota</h3>
+                <button class="modal-close" id="closeNoteModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Contenido</label>
+                    <textarea id="noteContent" rows="4" placeholder="Escribe tu nota aquí..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="noteCategory">
+                        <option value="general">General</option>
+                        <option value="work">Trabajo</option>
+                        <option value="personal">Personal</option>
+                        <option value="shopping">Compras</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select id="notePriority">
+                        <option value="0">Normal</option>
+                        <option value="1">Alta</option>
+                        <option value="2">Urgente</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelNote">Cancelar</button>
+                <button class="btn-primary" id="saveNote">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for create/edit template -->
+    <div class="modal" id="templateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="templateModalTitle">Crear Template</h3>
+                <button class="modal-close" id="closeTemplateModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nombre del Template</label>
+                    <input type="text" id="templateName" placeholder="Ej: Buscar en web">
+                </div>
+                <div class="form-group">
+                    <label>Comando con Variables</label>
+                    <textarea id="templateCommand" rows="3" placeholder="Usa {{variable}} para valores dinámicos&#10;Ej: busca {{término}} en {{motor}}"></textarea>
+                    <small style="color: var(--text-secondary); margin-top: 0.5rem; display: block;">
+                        💡 Usa <code>{{nombre}}</code> para crear variables que se rellenarán al ejecutar
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="templateCategory">
+                        <option value="general">General</option>
+                        <option value="web">Web</option>
+                        <option value="music">Música</option>
+                        <option value="system">Sistema</option>
+                        <option value="productivity">Productividad</option>
+                    </select>
+                </div>
+                <div id="templateVariablesPreview" style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); display: none;">
+                    <strong style="color: var(--text-primary);">Variables detectadas:</strong>
+                    <div id="variablesList" style="margin-top: 0.5rem; color: var(--text-secondary);"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelTemplate">Cancelar</button>
+                <button class="btn-primary" id="saveTemplate">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for execute template (fill variables) -->
+    <div class="modal" id="executeTemplateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="executeTemplateTitle">Ejecutar Template</h3>
+                <button class="modal-close" id="closeExecuteTemplateModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="executeTemplatePreview" style="padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+                    <strong style="color: var(--text-primary);">Template:</strong>
+                    <div id="templateCommandPreview" style="margin-top: 0.5rem; color: var(--text-secondary); font-family: monospace;"></div>
+                </div>
+                <div id="templateVariablesForm">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelExecuteTemplate">Cancelar</button>
+                <button class="btn-primary" id="confirmExecuteTemplate">
+                    <i class="fas fa-play"></i> Ejecutar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/debug.js?v=2"></script>
+    <script src="/static/js/app.js?v=2"></script>
+</body>
+</html>

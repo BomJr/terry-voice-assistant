@@ -1,0 +1,180 @@
+actions:
+  confirmation_level: critical
+  default_browser: Atlas
+  enabled_categories:
+  - system
+  - files
+  - browser
+  - media
+  - terminal
+  - utilities
+  execution_timeout_seconds: 30
+  fallback_browser: Google Chrome
+audio:
+  buffer_seconds: 30
+  channels: 1
+  chunk_size: 1024
+  input_device: null
+  output_device: null
+  sample_rate: 16000
+  vad_aggressiveness: 2
+barge_in:
+  enabled: true
+  interrupt_keywords:
+  - cancela
+  - para
+  - stop
+  - cancel
+camera_vision:
+  auto_start: false
+  camera_password: ''
+  camera_url: http://192.168.1.100:8080/video
+  camera_username: admin
+  confidence_threshold: 0.6
+  detection_interval: 1.0
+  enabled: true
+  face_recognition_config: config/config.yaml
+  face_recognition_path: ~/face-recognition
+  log_detections: true
+  max_faces_per_frame: 5
+  notify_on_detection: true
+  notify_on_unknown: true
+  presence_timeout: 10.0
+  save_snapshots: false
+  skip_frames: 0
+  snapshot_directory: data/camera/snapshots
+  use_webcam: false
+  webcam_index: 0
+context_tracking:
+  enabled: true
+  entity_tracking: true
+  pronoun_resolution: true
+  timeout_minutes: 5
+dictation:
+  auto_punctuation: true
+  enabled: true
+file_search:
+  enabled: true
+  max_results: 10
+  use_spotlight: true
+frustration_detection:
+  enabled: false
+  sensitivity: 0.5
+general:
+  default_language: es
+  log_level: INFO
+  name: Home-Alexa
+  version: 1.0.0
+ide_control:
+  enabled: true
+  supported_ides:
+  - vscode
+  vscode_path: /usr/local/bin/code
+intelligent_suggestions:
+  context_based: true
+  enabled: true
+  max_suggestions: 3
+  min_confidence: 0.6
+  pattern_based: true
+  time_based: true
+llm:
+  ollama:
+    fallback_model: llama3:latest
+    host: http://localhost:11434
+    max_tokens: 150
+    model: llama3.1:latest
+    temperature: 0.3
+    timeout_seconds: 10
+  provider: ollama
+macros:
+  enabled: true
+  macros_directory: ~/.terry/macros
+  max_macros: 30
+memory:
+  cleanup:
+    conversations_ttl_days: 7
+    enabled: true
+    facts_unused_ttl_days: 30
+    logs_ttl_hours: 24
+  context_window: 5
+  database_path: data/memory.db
+ocr:
+  enabled: true
+  engine: tesseract
+  languages:
+  - eng
+  - spa
+pattern_learning:
+  enabled: true
+  min_occurrences: 3
+persistent_memory:
+  conversations: true
+  emotional_context: true
+  enabled: true
+  preferences: true
+  retention_days: 90
+  temporal_patterns: true
+plugins:
+  auto_discover: true
+  enabled: true
+  plugin_directory: ~/.terry/plugins
+responses:
+  confirmation_prompts:
+    en: Do you confirm this action?
+    es: ¿Confirmas esta acción?
+  error_messages:
+    en: Sorry, there was an error processing your request.
+    es: Lo siento, hubo un error al procesar tu solicitud.
+  not_understood:
+    en: I didn't understand your request. Can you repeat it?
+    es: No entendí tu solicitud. ¿Puedes repetirla?
+  ready:
+    en: I'm listening
+    es: Estoy escuchando
+rest_api:
+  allow_remote: false
+  enabled: false
+  host: 127.0.0.1
+  port: 8765
+scheduler:
+  enabled: true
+  max_scheduled_routines: 20
+stt:
+  engine: mlx_whisper
+  mlx_whisper:
+    compute_type: float16
+  model: base
+triggers:
+  enabled: true
+  max_triggers: 50
+tts:
+  engine: piper
+  macos_say:
+    voice_en: Samantha
+    voice_es: Monica
+  piper:
+    cache_enabled: true
+    cache_max_size_mb: 100
+    speed: 1.0
+    voices:
+      en: config/voices/en_US-lessac-medium.onnx
+      es: config/voices/es_ES-davefx-medium.onnx
+undo_system:
+  enabled: true
+  max_history: 10
+visual_notifications:
+  enabled: true
+  show_for_all_responses: true
+  sound: false
+voice_notes:
+  database_path: ~/.terry/notes/notes.db
+  embeddings_path: ~/.terry/notes/embeddings
+  enabled: true
+  max_search_results: 5
+wakeword:
+  cooldown_seconds: 2
+  enabled: true
+  phrase: hey mac
+  post_wake_capture_seconds: 8
+  silence_threshold_seconds: 1.5
+  threshold: 0.5

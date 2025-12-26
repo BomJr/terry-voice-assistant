@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnóstico Terry</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 2rem;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+        button {
+            padding: 2rem 3rem;
+            font-size: 1.5rem;
+            background: #0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 1rem;
+            color: #000;
+            font-weight: bold;
+        }
+        button:hover { background: #0c0; }
+        #output {
+            background: #000;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid #0f0;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Diagnóstico de Terry</h1>
+
+    <button onclick="diagnosticar()">
+        1️⃣ DIAGNOSTICAR PROBLEMA
+    </button>
+
+    <button onclick="forzarClicks()">
+        2️⃣ FORZAR CLICKS (Arreglar)
+    </button>
+
+    <button onclick="window.location.href='/'">
+        3️⃣ IR A PÁGINA PRINCIPAL
+    </button>
+
+    <div id="output"></div>
+
+    <script>
+        function log(msg) {
+            const output = document.getElementById('output');
+            output.textContent += msg + '\n';
+            console.log(msg);
+        }
+
+        function diagnosticar() {
+            document.getElementById('output').textContent = '';
+            log('=== INICIANDO DIAGNÓSTICO ===\n');
+
+            // Abrir página principal en nueva ventana
+            const win = window.open('http://localhost:8080', '_blank');
+
+            setTimeout(() => {
+                try {
+                    log('Verificando página principal...');
+
+                    // Verificar TerryUI
+                    log('TerryUI existe? ' + (typeof win.terryUI !== 'undefined' ? 'SÍ' : 'NO'));
+
+                    // Verificar modales
+                    const modals = win.document.querySelectorAll('.modal');
+                    log('\nModales encontrados: ' + modals.length);
+                    modals.forEach(modal => {
+                        const style = win.getComputedStyle(modal);
+                        const visible = style.display !== 'none';
+                        log(`  - ${modal.id}: ${visible ? '⚠️ VISIBLE (MAL)' : '✅ Oculto (OK)'}`);
+                    });
+
+                    // Buscar elementos bloqueando
+                    log('\nBuscando elementos que bloquean clicks...');
+                    const blocking = [];
+                    win.document.querySelectorAll('*').forEach(el => {
+                        const style = win.getComputedStyle(el);
+                        const rect = el.getBoundingClientRect();
+
+                        if (rect.width > win.innerWidth * 0.8 &&
+                            rect.height > win.innerHeight * 0.8 &&
+                            style.display !== 'none' &&
+                            (style.position === 'fixed' || style.position === 'absolute')) {
+                            blocking.push({
+                                id: el.id || 'sin-id',
+                                clase: el.className,
+                                zIndex: style.zIndex,
+                                pointerEvents: style.pointerEvents
+                            });
+                        }
+                    });
+
+                    if (blocking.length > 0) {
+                        log('⚠️ ELEMENTOS BLOQUEANDO:');
+                        blocking.forEach(b => {
+                            log(`  - ID: ${b.id}, z-index: ${b.zIndex}, pointer-events: ${b.pointerEvents}`);
+                        });
+                    } else {
+                        log('✅ No se encontraron elementos bloqueando');
+                    }
+
+                    log('\n=== DIAGNÓSTICO COMPLETADO ===');
+                    log('\nSi encontraste problemas, presiona "FORZAR CLICKS"');
+
+                } catch (e) {
+                    log('❌ Error: ' + e.message);
+                    log('Intenta abrir http://localhost:8080 manualmente');
+                }
+            }, 2000);
+        }
+
+        function forzarClicks() {
+            document.getElementById('output').textContent = '';
+            log('=== FORZANDO CLICKS ===\n');
+
+            const win = window.open('http://localhost:8080', '_blank');
+
+            setTimeout(() => {
+                try {
+                    log('Removiendo bloqueos...');
+
+                    // Remover pointer-events: none
+                    let fixed = 0;
+                    win.document.querySelectorAll('*').forEach(el => {
+                        const style = win.getComputedStyle(el);
+                        if (style.pointerEvents === 'none' && el.style.pointerEvents !== 'none') {
+                            el.style.pointerEvents = 'auto';
+                            fixed++;
+                        }
+                    });
+                    log(`✅ ${fixed} elementos arreglados`);
+
+                    // Ocultar modales
+                    win.document.querySelectorAll('.modal').forEach(modal => {
+                        if (!modal.classList.contains('show')) {
+                            modal.style.display = 'none';
+                            log(`✅ Modal ${modal.id} ocultado`);
+                        }
+                    });
+
+                    log('\n=== ARREGLO COMPLETADO ===');
+                    log('Intenta hacer click en la página principal ahora');
+
+                } catch (e) {
+                    log('❌ Error: ' + e.message);
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

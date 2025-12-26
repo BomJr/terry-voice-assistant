@@ -1,0 +1,226 @@
+# Home-Alexa - Configuración Principal
+# Asistente de voz offline para Mac Mini M4
+
+general:
+  name: "Home-Alexa"
+  version: "1.0.0"
+  default_language: "es"  # es, en
+  log_level: "INFO"       # DEBUG, INFO, WARNING, ERROR
+
+audio:
+  input_device: null      # null = dispositivo por defecto (Razer BlackShark V2 X)
+  output_device: null     # null = dispositivo por defecto
+  sample_rate: 16000      # Hz
+  channels: 1             # mono
+  chunk_size: 1024        # frames por buffer
+  buffer_seconds: 30      # segundos de buffer circular
+  vad_aggressiveness: 2   # 0-3 (mayor = más agresivo filtrando ruido)
+
+wakeword:
+  enabled: true
+  phrase: "hey mac"       # Frase de activación
+  threshold: 0.5          # 0-1, sensibilidad de detección
+  cooldown_seconds: 2     # tiempo entre activaciones
+  post_wake_capture_seconds: 8    # segundos a capturar después del wake word
+  silence_threshold_seconds: 1.5  # silencio para terminar captura
+
+stt:
+  engine: "mlx_whisper"   # mlx_whisper, vosk
+  model: "base"           # tiny, base, small, medium, large
+  mlx_whisper:
+    compute_type: "float16"  # float16 para M4
+
+tts:
+  engine: "piper"         # piper, macos_say
+  piper:
+    voices:
+      es: "config/voices/es_ES-davefx-medium.onnx"
+      en: "config/voices/en_US-lessac-medium.onnx"
+    speed: 1.0            # 0.5 - 2.0
+    cache_enabled: true
+    cache_max_size_mb: 100
+  macos_say:              # Fallback con comando 'say' nativo
+    voice_es: "Monica"
+    voice_en: "Samantha"
+
+llm:
+  provider: "ollama"
+  ollama:
+    host: "http://localhost:11434"
+    model: "llama3.1:latest"        # Modelo principal
+    fallback_model: "llama3:latest" # Modelo de respaldo
+    timeout_seconds: 10             # Reducido para respuestas rápidas
+    temperature: 0.3                # Más determinista = más rápido
+    max_tokens: 150                 # Respuestas concisas
+
+memory:
+  database_path: "data/memory.db"
+  context_window: 5       # últimas N conversaciones para contexto
+  cleanup:
+    enabled: true
+    logs_ttl_hours: 24              # Logs no críticos
+    conversations_ttl_days: 7       # Conversaciones normales
+    facts_unused_ttl_days: 30       # Hechos no accedidos
+
+actions:
+  confirmation_level: "critical"    # none, critical, all
+  execution_timeout_seconds: 30
+  default_browser: "Atlas"          # Atlas, Google Chrome, Safari, Firefox
+  fallback_browser: "Google Chrome"
+  enabled_categories:
+    - system
+    - files
+    - browser
+    - media
+    - terminal
+    - utilities
+
+responses:
+  confirmation_prompts:
+    es: "¿Confirmas esta acción?"
+    en: "Do you confirm this action?"
+  error_messages:
+    es: "Lo siento, hubo un error al procesar tu solicitud."
+    en: "Sorry, there was an error processing your request."
+  not_understood:
+    es: "No entendí tu solicitud. ¿Puedes repetirla?"
+    en: "I didn't understand your request. Can you repeat it?"
+  ready:
+    es: "Estoy escuchando"
+    en: "I'm listening"
+
+# ============================================
+# Terry v6.1 - 20 Substantial Improvements
+# ============================================
+
+# PHASE 1: Quick Wins
+
+# #6 Visual Notifications - macOS notifications for all responses
+visual_notifications:
+  enabled: true                     # Enable/disable notifications
+  show_for_all_responses: true      # Show notification for every response
+  sound: false                      # Play sound with notifications
+
+# #12 Voice Notes - Note-taking with semantic search
+voice_notes:
+  enabled: true
+  database_path: "~/.terry/notes/notes.db"
+  embeddings_path: "~/.terry/notes/embeddings"
+  max_search_results: 5
+
+# #16 Undo System - Undo last action
+undo_system:
+  enabled: true
+  max_history: 10                   # Maximum actions to keep in history
+
+# PHASE 2: Intelligence (to be enabled later)
+
+# #1 Persistent Memory
+persistent_memory:
+  enabled: true                     # ✅ ENABLED in Phase 2
+  conversations: true
+  preferences: true
+  emotional_context: true
+  temporal_patterns: true
+  retention_days: 90
+
+# #2 Pattern Learning
+pattern_learning:
+  enabled: true                     # ✅ ENABLED in Phase 2
+  min_occurrences: 3                # Minimum times before considering a pattern
+
+# #3 Context Tracking
+context_tracking:
+  enabled: true                     # ✅ ENABLED in Phase 2
+  pronoun_resolution: true
+  entity_tracking: true
+  timeout_minutes: 5                # Context expires after 5 minutes
+
+# #4 Intelligent Suggestions
+intelligent_suggestions:
+  enabled: true                     # ✅ ENABLED in Phase 2
+  time_based: true
+  context_based: true
+  pattern_based: true
+  min_confidence: 0.6               # Minimum confidence to show (0-1)
+  max_suggestions: 3                # Maximum suggestions to show
+
+# PHASE 3: Multimodality
+
+# #5 Camera Vision - Face recognition
+camera_vision:
+  enabled: false                    # Opt-in (requires face-recognition setup)
+  face_recognition_path: "~/face-recognition"  # Or set FACE_RECOG_PATH env var
+  api_url: "http://localhost:2100"
+  use_local_modules: true           # Use local modules for speed
+  use_api_for_management: true      # Use API for person management
+
+# #7 OCR Universal
+ocr:
+  enabled: true
+  engine: "tesseract"               # tesseract, apple_vision
+  languages: ["eng", "spa"]
+
+# PHASE 4: Automation
+
+# #8 Scheduled Routines
+scheduler:
+  enabled: true
+  max_scheduled_routines: 20
+
+# #9 Conditional Triggers
+triggers:
+  enabled: true
+  max_triggers: 50
+
+# #10 Macros
+macros:
+  enabled: true
+  macros_directory: "~/.terry/macros"
+  max_macros: 30
+
+# PHASE 5: Productivity
+
+# #11 Universal Dictation
+dictation:
+  enabled: true
+  auto_punctuation: true
+
+# #13 File Search
+file_search:
+  enabled: true
+  use_spotlight: true
+  max_results: 10
+
+# #14 IDE Control
+ide_control:
+  enabled: true
+  supported_ides: ["vscode"]
+  vscode_path: "/usr/local/bin/code"
+
+# PHASE 6: Experience
+
+# #15 Barge-in (Interrupt Terry)
+barge_in:
+  enabled: true
+  interrupt_keywords: ["cancela", "para", "stop", "cancel"]
+
+# #18 Frustration Detection
+frustration_detection:
+  enabled: false                    # Opt-in (experimental)
+  sensitivity: 0.5                  # 0-1
+
+# PHASE 7: Integration
+
+# #19 Plugin System
+plugins:
+  enabled: true
+  plugin_directory: "~/.terry/plugins"
+  auto_discover: true
+
+# #20 REST API
+rest_api:
+  enabled: false                    # Opt-in (security consideration)
+  host: "127.0.0.1"
+  port: 8765
+  allow_remote: false               # Only localhost by default

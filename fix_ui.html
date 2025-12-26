@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix Detector</title>
+    <script>
+        // Este script se ejecutará en la consola para diagnosticar
+        console.log('=== DIAGNÓSTICO DE BLOQUEO DE CLICKS ===');
+
+        setTimeout(() => {
+            // Verificar modales
+            const modals = document.querySelectorAll('.modal');
+            console.log('Modales encontrados:', modals.length);
+            modals.forEach((modal, i) => {
+                const isVisible = window.getComputedStyle(modal).display !== 'none';
+                console.log(`Modal ${i}:`, {
+                    id: modal.id,
+                    display: window.getComputedStyle(modal).display,
+                    visible: isVisible,
+                    zIndex: window.getComputedStyle(modal).zIndex
+                });
+            });
+
+            // Verificar elementos con z-index alto
+            const allElements = document.querySelectorAll('*');
+            const highZIndex = [];
+            allElements.forEach(el => {
+                const zIndex = window.getComputedStyle(el).zIndex;
+                if (zIndex !== 'auto' && parseInt(zIndex) > 100) {
+                    highZIndex.push({
+                        element: el.tagName,
+                        id: el.id,
+                        class: el.className,
+                        zIndex: zIndex,
+                        display: window.getComputedStyle(el).display,
+                        pointerEvents: window.getComputedStyle(el).pointerEvents
+                    });
+                }
+            });
+            console.log('Elementos con z-index > 100:', highZIndex);
+
+            // Verificar elementos con pointer-events: none
+            const noPointerEvents = [];
+            allElements.forEach(el => {
+                const pe = window.getComputedStyle(el).pointerEvents;
+                const display = window.getComputedStyle(el).display;
+                if (pe === 'none' && display !== 'none') {
+                    noPointerEvents.push({
+                        element: el.tagName,
+                        id: el.id,
+                        class: el.className,
+                        pointerEvents: pe
+                    });
+                }
+            });
+            console.log('Elementos con pointer-events:none (visibles):', noPointerEvents);
+
+            // Verificar el elemento en la posición del cursor
+            document.addEventListener('click', (e) => {
+                const el = document.elementFromPoint(e.clientX, e.clientY);
+                console.log('Elemento bajo el click:', {
+                    element: el,
+                    tagName: el.tagName,
+                    id: el.id,
+                    className: el.className,
+                    pointerEvents: window.getComputedStyle(el).pointerEvents,
+                    zIndex: window.getComputedStyle(el).zIndex
+                });
+            }, { once: true });
+
+            console.log('=== DIAGNÓSTICO COMPLETADO ===');
+            console.log('Haz click en cualquier parte de la página...');
+        }, 2000);
+    </script>
+</head>
+<body>
+    <h1>Abre la consola y copia el código JavaScript que está arriba</h1>
+    <p>O simplemente abre http://localhost:8080 y pega esto en la consola</p>
+</body>
+</html>

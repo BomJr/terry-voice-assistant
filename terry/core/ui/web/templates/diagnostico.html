@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico de Navegador - Terry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        .test-item {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .test-item.pass {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        .test-item.fail {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        .test-item.pending {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        .icon {
+            font-size: 1.5rem;
+        }
+        .test-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .test-detail {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        .browser-info {
+            background: #e7f3ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .recommendations {
+            background: #fff3cd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        .recommendations h2 {
+            color: #856404;
+            margin-bottom: 1rem;
+        }
+        .recommendations ul {
+            list-style-position: inside;
+            color: #856404;
+        }
+        .recommendations li {
+            margin: 0.5rem 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diagnóstico de Navegador</h1>
+        <p style="color: #666; margin-bottom: 2rem;">
+            Verificando compatibilidad de tu navegador con Terry Web UI...
+        </p>
+
+        <div class="browser-info" id="browserInfo">
+            <strong>Navegador Detectado:</strong> <span id="browserName">Detectando...</span><br>
+            <strong>User Agent:</strong> <span id="userAgent" style="font-size: 0.8rem; word-break: break-all;"></span>
+        </div>
+
+        <h2 style="margin: 2rem 0 1rem 0;">Pruebas de Compatibilidad:</h2>
+
+        <div id="tests">
+            <div class="test-item pending" id="test-js">
+                <span class="icon">⏳</span>
+                <div>
+                    <div class="test-name">JavaScript Básico</div>
+                    <div class="test-detail">Verificando ejecución de JavaScript...</div>
+                </div>
+            </div>
+            <div class="test-item pending" id="test-fetch">
+                <span class="icon">⏳</span>
+                <div>
+                    <div class="test-name">Fetch API</div>
+                    <div class="test-detail">Verificando soporte para requests HTTP...</div>
+                </div>
+            </div>
+            <div class="test-item pending" id="test-websocket">
+                <span class="icon">⏳</span>
+                <div>
+                    <div class="test-name">WebSocket</div>
+                    <div class="test-detail">Verificando conexión en tiempo real...</div>
+                </div>
+            </div>
+            <div class="test-item pending" id="test-storage">
+                <span class="icon">⏳</span>
+                <div>
+                    <div class="test-name">LocalStorage</div>
+                    <div class="test-detail">Verificando almacenamiento local...</div>
+                </div>
+            </div>
+            <div class="test-item pending" id="test-events">
+                <span class="icon">⏳</span>
+                <div>
+                    <div class="test-name">Event Listeners</div>
+                    <div class="test-detail">Verificando eventos de click...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendations" id="recommendations" style="display: none;">
+            <h2>⚠️ Problemas Detectados</h2>
+            <p>Tu navegador tiene limitaciones que impiden usar Terry Web UI completamente.</p>
+            <ul id="recommendationsList"></ul>
+            <p style="margin-top: 1rem; font-weight: bold;">
+                <strong>Solución:</strong> Usa Chrome, Firefox, Safari o Edge.
+            </p>
+            <a href="http://localhost:8080/docs" class="btn">
+                📚 Ir a Swagger UI (Funciona en cualquier navegador)
+            </a>
+        </div>
+
+        <div id="successMessage" style="display: none; background: #d4edda; padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+            <h2 style="color: #155724;">✅ Navegador Compatible</h2>
+            <p style="color: #155724; margin-top: 0.5rem;">
+                Tu navegador soporta todas las features necesarias.
+            </p>
+            <a href="http://localhost:8080" class="btn">
+                🚀 Ir a Terry Web UI
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Detect browser
+        const ua = navigator.userAgent;
+        document.getElementById('userAgent').textContent = ua;
+
+        let browserName = 'Desconocido';
+        if (ua.includes('Chrome') && !ua.includes('Edg')) browserName = 'Google Chrome';
+        else if (ua.includes('Firefox')) browserName = 'Mozilla Firefox';
+        else if (ua.includes('Safari') && !ua.includes('Chrome')) browserName = 'Safari';
+        else if (ua.includes('Edg')) browserName = 'Microsoft Edge';
+        else if (ua.includes('Atlas')) browserName = 'Atlas (ChatGPT Browser)';
+
+        document.getElementById('browserName').textContent = browserName;
+
+        let failedTests = [];
+        let passedTests = 0;
+
+        function updateTest(id, pass, detail) {
+            const el = document.getElementById(id);
+            el.className = 'test-item ' + (pass ? 'pass' : 'fail');
+            el.querySelector('.icon').textContent = pass ? '✅' : '❌';
+            el.querySelector('.test-detail').textContent = detail;
+
+            if (pass) passedTests++;
+            else failedTests.push(el.querySelector('.test-name').textContent);
+        }
+
+        // Test 1: JavaScript básico
+        try {
+            const arr = [1, 2, 3];
+            const doubled = arr.map(x => x * 2);
+            updateTest('test-js', true, 'JavaScript funciona correctamente');
+        } catch (e) {
+            updateTest('test-js', false, 'Error: ' + e.message);
+        }
+
+        // Test 2: Fetch API
+        try {
+            if (typeof fetch !== 'undefined') {
+                fetch('/api/status')
+                    .then(r => r.json())
+                    .then(data => {
+                        updateTest('test-fetch', true, 'Fetch API funciona - Status: ' + data.status);
+                    })
+                    .catch(e => {
+                        updateTest('test-fetch', false, 'Error en fetch: ' + e.message);
+                    });
+            } else {
+                updateTest('test-fetch', false, 'Fetch API no disponible');
+            }
+        } catch (e) {
+            updateTest('test-fetch', false, 'Error: ' + e.message);
+        }
+
+        // Test 3: WebSocket
+        try {
+            if (typeof WebSocket !== 'undefined') {
+                const ws = new WebSocket('ws://localhost:8080/ws');
+                ws.onopen = function() {
+                    updateTest('test-websocket', true, 'WebSocket conectado correctamente');
+                    ws.close();
+                };
+                ws.onerror = function() {
+                    updateTest('test-websocket', false, 'WebSocket no pudo conectar');
+                };
+                setTimeout(() => {
+                    if (document.getElementById('test-websocket').className.includes('pending')) {
+                        updateTest('test-websocket', false, 'WebSocket timeout');
+                    }
+                }, 3000);
+            } else {
+                updateTest('test-websocket', false, 'WebSocket no disponible');
+            }
+        } catch (e) {
+            updateTest('test-websocket', false, 'Error: ' + e.message);
+        }
+
+        // Test 4: LocalStorage
+        try {
+            localStorage.setItem('test', 'value');
+            const val = localStorage.getItem('test');
+            localStorage.removeItem('test');
+            updateTest('test-storage', val === 'value',
+                val === 'value' ? 'LocalStorage funciona' : 'LocalStorage no retorna valores correctamente');
+        } catch (e) {
+            updateTest('test-storage', false, 'LocalStorage bloqueado o no disponible');
+        }
+
+        // Test 5: Event Listeners
+        try {
+            const testBtn = document.createElement('button');
+            let clicked = false;
+            testBtn.addEventListener('click', () => { clicked = true; });
+            testBtn.click();
+            updateTest('test-events', clicked,
+                clicked ? 'Event listeners funcionan' : 'Event listeners no funcionan');
+        } catch (e) {
+            updateTest('test-events', false, 'Error: ' + e.message);
+        }
+
+        // Show results after 4 seconds
+        setTimeout(() => {
+            if (failedTests.length > 0) {
+                const recDiv = document.getElementById('recommendations');
+                recDiv.style.display = 'block';
+
+                const list = document.getElementById('recommendationsList');
+                list.innerHTML = failedTests.map(t =>
+                    '<li><strong>' + t + '</strong> no funciona correctamente</li>'
+                ).join('');
+            } else {
+                document.getElementById('successMessage').style.display = 'block';
+            }
+        }, 4000);
+    </script>
+</body>
+</html>

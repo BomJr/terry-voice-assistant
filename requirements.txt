@@ -1,0 +1,34 @@
+# Home-Alexa - Asistente de Voz Offline para Mac Mini M4
+# Dependencias Python
+
+# ===== Audio =====
+sounddevice>=0.4.6              # Captura/reproducción de audio (mejor soporte macOS)
+soundfile>=0.12.1               # Lectura/escritura archivos audio
+numpy>=1.26.0                   # Procesamiento numérico
+webrtcvad>=2.0.10               # Voice Activity Detection
+
+# ===== Speech-to-Text (Apple Silicon optimizado) =====
+mlx>=0.18.0                     # Framework MLX de Apple
+mlx-whisper>=0.4.0              # Whisper optimizado para Apple Silicon
+
+# ===== Text-to-Speech =====
+# piper-tts>=1.2.0              # Piper TTS (opcional, usar macOS 'say' como fallback)
+# onnxruntime>=1.16.0           # Runtime para modelos ONNX (solo si usas Piper)
+
+# ===== Wake Word =====
+# openwakeword>=0.6.0           # Detección de wake word (opcional, requiere Python <3.14)
+
+# ===== LLM =====
+ollama>=0.3.0                   # Cliente oficial Ollama
+httpx>=0.27.0                   # Cliente HTTP asíncrono
+
+# ===== macOS Integration =====
+pyobjc-core>=10.0               # Integración con macOS APIs
+pyobjc-framework-Cocoa>=10.0    # Framework Cocoa
+pyobjc-framework-AVFoundation>=10.0  # Audio/Video
+
+# ===== Utilidades =====
+pyyaml>=6.0.1                   # Configuración YAML
+schedule>=1.2.0                 # Programación de tareas
+rich>=13.7.0                    # Output de consola mejorado
+python-dotenv>=1.0.0            # Variables de entorno

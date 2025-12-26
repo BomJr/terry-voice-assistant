@@ -1,0 +1,169 @@
+# Home-Alexa - Rutinas Predefinidas
+# Define secuencias de acciones que se ejecutan con un solo comando
+
+routines:
+  # Rutina de la mañana
+  morning:
+    name: "Rutina de la mañana"
+    description: "Abre aplicaciones y reproduce música suave"
+    keywords:
+      - "rutina de la mañana"
+      - "buenos días"
+      - "modo mañana"
+    actions:
+      - type: open_app
+        params:
+          app_name: "Safari"
+      - type: volume_set
+        params:
+          level: 30
+      - type: media_play
+        params: {}
+
+  # Modo trabajo
+  work:
+    name: "Modo trabajo"
+    description: "Configura el entorno para trabajar"
+    keywords:
+      - "modo trabajo"
+      - "empezar a trabajar"
+      - "configurar trabajo"
+    actions:
+      - type: open_app
+        params:
+          app_name: "Safari"
+      - type: volume_set
+        params:
+          level: 20
+      - type: browser_open_url
+        params:
+          url: "https://mail.google.com"
+          browser: "Safari"
+
+  # Modo estudio
+  study:
+    name: "Modo estudio"
+    description: "Música lo-fi y volumen bajo"
+    keywords:
+      - "modo estudio"
+      - "estudiar"
+      - "concentración"
+    actions:
+      - type: volume_set
+        params:
+          level: 25
+      - type: browser_open_url
+        params:
+          url: "https://www.youtube.com/results?search_query=lofi+study+music"
+          browser: "Safari"
+
+  # Descanso
+  break:
+    name: "Descanso"
+    description: "Pausa la música y silencia el volumen"
+    keywords:
+      - "descanso"
+      - "pausa todo"
+      - "modo silencio"
+    actions:
+      - type: media_pause
+        params: {}
+      - type: volume_mute
+        params: {}
+
+  # Modo presentación
+  presentation:
+    name: "Modo presentación"
+    description: "Maximiza volumen y pausa notificaciones"
+    keywords:
+      - "modo presentación"
+      - "presentar"
+      - "demo"
+    actions:
+      - type: volume_set
+        params:
+          level: 80
+      - type: media_pause
+        params: {}
+
+  # Fin del día
+  shutdown:
+    name: "Fin del día"
+    description: "Cierra todo y apaga música"
+    keywords:
+      - "fin del día"
+      - "terminar"
+      - "cerrar todo"
+    actions:
+      - type: media_pause
+        params: {}
+      - type: volume_mute
+        params: {}
+
+  # Modo gaming
+  gaming:
+    name: "Modo gaming"
+    description: "Volumen alto, cierra apps innecesarias"
+    keywords:
+      - "modo gaming"
+      - "modo juego"
+      - "jugar"
+    actions:
+      - type: volume_set
+        params:
+          level: 60
+      - type: media_pause
+        params: {}
+
+  # Música para cocinar
+  cooking:
+    name: "Música para cocinar"
+    description: "Música alegre a volumen medio"
+    keywords:
+      - "cocinar"
+      - "música cocina"
+      - "modo cocina"
+    actions:
+      - type: volume_set
+        params:
+          level: 50
+      - type: browser_open_url
+        params:
+          url: "https://www.youtube.com/results?search_query=cooking+music"
+          browser: "Safari"
+
+  # Modo fitness
+  fitness:
+    name: "Modo fitness"
+    description: "Música energética para ejercicio"
+    keywords:
+      - "fitness"
+      - "ejercicio"
+      - "entrenar"
+      - "modo gym"
+    actions:
+      - type: volume_set
+        params:
+          level: 70
+      - type: browser_open_url
+        params:
+          url: "https://www.youtube.com/results?search_query=workout+music"
+          browser: "Safari"
+
+  # Modo relax
+  relax:
+    name: "Modo relax"
+    description: "Música relajante y volumen bajo"
+    keywords:
+      - "relax"
+      - "relajar"
+      - "meditar"
+      - "modo zen"
+    actions:
+      - type: volume_set
+        params:
+          level: 25
+      - type: browser_open_url
+        params:
+          url: "https://www.youtube.com/results?search_query=relaxing+music"
+          browser: "Safari"

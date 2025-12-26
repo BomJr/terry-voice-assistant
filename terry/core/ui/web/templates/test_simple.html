@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simple - Terry</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 2rem;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+        .test {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #2a2a2a;
+            border-left: 4px solid #0f0;
+        }
+        .error {
+            border-left-color: #f00;
+            color: #f00;
+        }
+        button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            margin: 1rem;
+            cursor: pointer;
+            background: #0f0;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #0a0;
+        }
+        #output {
+            background: #000;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid #0f0;
+            min-height: 200px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Simple de JavaScript</h1>
+    <p>Probando funcionalidad básica...</p>
+
+    <div id="results"></div>
+
+    <h2>Tests Interactivos:</h2>
+    <button onclick="testClick()">1. Test Click</button>
+    <button onclick="testFetch()">2. Test Fetch API</button>
+    <button onclick="testWebSocket()">3. Test WebSocket</button>
+
+    <h2>Output:</h2>
+    <div id="output"></div>
+
+    <script>
+        const results = document.getElementById('results');
+        const output = document.getElementById('output');
+
+        function log(msg, error = false) {
+            console.log(msg);
+            output.textContent += msg + '\n';
+            if (error) {
+                output.style.color = '#f00';
+            }
+        }
+
+        function addTest(name, passed, detail) {
+            const div = document.createElement('div');
+            div.className = 'test' + (passed ? '' : ' error');
+            div.innerHTML = `
+                <strong>${passed ? '✅' : '❌'} ${name}</strong><br>
+                ${detail}
+            `;
+            results.appendChild(div);
+        }
+
+        // Test 1: DOM loaded
+        try {
+            addTest('DOM Content Loaded', true, 'El script se ejecutó correctamente');
+            log('✅ Test 1: DOM loaded');
+        } catch (e) {
+            addTest('DOM Content Loaded', false, e.message);
+            log('❌ Test 1: ' + e.message, true);
+        }
+
+        // Test 2: querySelector
+        try {
+            const el = document.querySelector('h1');
+            addTest('querySelector', el !== null, el ? 'Elemento encontrado' : 'No se pudo encontrar elemento');
+            log('✅ Test 2: querySelector works');
+        } catch (e) {
+            addTest('querySelector', false, e.message);
+            log('❌ Test 2: ' + e.message, true);
+        }
+
+        // Test 3: addEventListener
+        try {
+            const testBtn = document.createElement('button');
+            let worked = false;
+            testBtn.addEventListener('click', () => { worked = true; });
+            testBtn.click();
+            addTest('addEventListener', worked, worked ? 'Event listener funciona' : 'No se disparó el evento');
+            log('✅ Test 3: addEventListener works');
+        } catch (e) {
+            addTest('addEventListener', false, e.message);
+            log('❌ Test 3: ' + e.message, true);
+        }
+
+        // Test 4: Fetch disponible
+        try {
+            const hasFetch = typeof fetch !== 'undefined';
+            addTest('Fetch API', hasFetch, hasFetch ? 'Fetch está disponible' : 'Fetch no disponible');
+            log('✅ Test 4: Fetch API available');
+        } catch (e) {
+            addTest('Fetch API', false, e.message);
+            log('❌ Test 4: ' + e.message, true);
+        }
+
+        // Test 5: WebSocket disponible
+        try {
+            const hasWS = typeof WebSocket !== 'undefined';
+            addTest('WebSocket', hasWS, hasWS ? 'WebSocket está disponible' : 'WebSocket no disponible');
+            log('✅ Test 5: WebSocket available');
+        } catch (e) {
+            addTest('WebSocket', false, e.message);
+            log('❌ Test 5: ' + e.message, true);
+        }
+
+        // Test 6: LocalStorage
+        try {
+            localStorage.setItem('test', 'value');
+            const val = localStorage.getItem('test');
+            localStorage.removeItem('test');
+            const works = val === 'value';
+            addTest('LocalStorage', works, works ? 'LocalStorage funciona' : 'No funciona correctamente');
+            log('✅ Test 6: LocalStorage works');
+        } catch (e) {
+            addTest('LocalStorage', false, e.message);
+            log('❌ Test 6: ' + e.message, true);
+        }
+
+        // Interactive tests
+        function testClick() {
+            log('🖱️ Click test ejecutado!');
+            alert('✅ Los clicks funcionan correctamente!');
+        }
+
+        async function testFetch() {
+            log('🌐 Probando Fetch API...');
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                log('✅ Fetch OK: ' + JSON.stringify(data, null, 2));
+                alert('✅ Fetch funciona! Status: ' + data.status);
+            } catch (e) {
+                log('❌ Fetch error: ' + e.message, true);
+                alert('❌ Error en Fetch: ' + e.message);
+            }
+        }
+
+        function testWebSocket() {
+            log('🔌 Probando WebSocket...');
+            try {
+                const ws = new WebSocket('ws://localhost:8080/ws');
+
+                ws.onopen = () => {
+                    log('✅ WebSocket conectado!');
+                    ws.send(JSON.stringify({type: 'ping'}));
+                };
+
+                ws.onmessage = (event) => {
+                    log('📨 Mensaje recibido: ' + event.data);
+                    alert('✅ WebSocket funciona!');
+                    ws.close();
+                };
+
+                ws.onerror = (error) => {
+                    log('❌ WebSocket error: ' + error, true);
+                    alert('❌ Error en WebSocket');
+                };
+
+                ws.onclose = () => {
+                    log('🔌 WebSocket cerrado');
+                };
+
+            } catch (e) {
+                log('❌ Error creando WebSocket: ' + e.message, true);
+                alert('❌ Error: ' + e.message);
+            }
+        }
+
+        log('🚀 Tests automáticos completados. Usa los botones para tests interactivos.');
+    </script>
+</body>
+</html>

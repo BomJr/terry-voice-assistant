@@ -1,0 +1,156 @@
+# ============================================
+# Terry Voice Assistant - .gitignore
+# GitHub Publication - Security & Privacy
+# ============================================
+
+# CRITICAL: Personal and Sensitive Data
+# ============================================
+.terry_microphone
+*.env
+*.env.*
+.env.local
+.env.production
+credentials.json
+secrets.yaml
+config/secrets/
+
+# Database Files (may contain personal data)
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+data/
+data/memory.db
+data/database/
+logs/*.log
+logs/
+
+# Cache Files (may contain personal queries/responses)
+# ============================================
+cache/
+*.cache
+ui_web/cache/
+terry/core/ui/web/cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual Environment
+# ============================================
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+
+# macOS System Files
+# ============================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# IDE and Editor Files
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Python Specific
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.tox/
+.nox/
+htmlcov/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Temporary Files
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+.~*
+
+# Voice/Audio Models (too large for GitHub)
+# ============================================
+config/voices/*.onnx
+config/voices/*.onnx.json
+config/wakewords/*.tflite
+*.wav
+*.mp3
+*.m4a
+
+# Face Recognition Models and Data
+# ============================================
+models/
+*.pkl
+*.pt
+*.pth
+embeddings/
+faces/
+face_data/
+
+# Jupyter Notebooks checkpoints
+# ============================================
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation that may contain personal info
+# ============================================
+# NOTE: Review these files before uncommenting
+# *_COMPLETO.md
+# RESUMEN_*.md
+# SESION_*.md
+
+# Test Results
+# ============================================
+test-results/
+coverage.xml
+*.cover
+
+# LaunchAgent (may contain personal paths)
+# ============================================
+*.plist
+
+# Backup files
+# ============================================
+*.backup
+*.bak
+*.old
+
+# Local configuration overrides
+# ============================================
+config/settings.local.yaml
+.claude/settings.local.json
+
+# Session and Archive Files
+# ============================================
+archive_root_scripts/
+archive_session_docs/

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Ultra Simple</title>
+    <style>
+        body { padding: 50px; font-family: Arial; font-size: 20px; }
+        button {
+            padding: 30px 60px;
+            font-size: 24px;
+            margin: 20px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        button:hover { background: #45a049; }
+        .result {
+            padding: 20px;
+            margin: 20px 0;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 TEST ULTRA SIMPLE</h1>
+    <p>Si puedes ver esto, la página carga.</p>
+    <p><strong>¿Puedes hacer click en estos botones?</strong></p>
+
+    <button onclick="test1()">BOTÓN 1 - CLICK AQUÍ</button>
+
+    <button onclick="test2()">BOTÓN 2 - CLICK AQUÍ</button>
+
+    <button onclick="test3()">BOTÓN 3 - CLICK AQUÍ</button>
+
+    <div id="resultado" class="result">
+        (Los resultados aparecerán aquí)
+    </div>
+
+    <script>
+        console.log('✅ JavaScript cargó correctamente');
+
+        function test1() {
+            console.log('✅ Botón 1 clickeado');
+            document.getElementById('resultado').innerHTML = '<h2 style="color: green;">✅ BOTÓN 1 FUNCIONA!</h2>';
+            alert('✅ Botón 1 funciona!');
+        }
+
+        function test2() {
+            console.log('✅ Botón 2 clickeado');
+            document.getElementById('resultado').innerHTML = '<h2 style="color: blue;">✅ BOTÓN 2 FUNCIONA!</h2>';
+            alert('✅ Botón 2 funciona!');
+        }
+
+        function test3() {
+            console.log('✅ Botón 3 clickeado');
+            document.getElementById('resultado').innerHTML = '<h2 style="color: orange;">✅ BOTÓN 3 FUNCIONA!</h2>';
+            alert('✅ Botón 3 funciona!');
+        }
+
+        // Auto test
+        setTimeout(() => {
+            console.log('Auto-test ejecutándose...');
+            document.getElementById('resultado').innerHTML =
+                '<p>✅ JavaScript está funcionando</p>' +
+                '<p>✅ DOM está disponible</p>' +
+                '<p>✅ setTimeout funciona</p>' +
+                '<p><strong>Ahora haz click en los botones arriba</strong></p>';
+        }, 1000);
+    </script>
+</body>
+</html>
